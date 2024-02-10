@@ -9,6 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 import logging
 import json
+from django.contrib.auth.forms import AuthenticationForm
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -29,17 +30,50 @@ def contact(request):
     return render(request, 'djangoapp/contact.html')
 
 # Create a `login_request` view to handle sign in request
-def login(request):
-    pass
-    
+def login_request(request):
+    context = {}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('psw')
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('djangoapp:index')
+        
+        else:
+            context['error_message'] = 'Invalid username or password'
+            return render(request, 'djangoapp/index.html', context)
 
 # Create a `logout_request` view to handle sign out request
-def logout(request):
-    pass
+def logout_request(request):
+    logout(request)
+    return redirect('djangoapp:index')
 
 # Create a `registration_request` view to handle sign up request
-def registration(request):
-    pass
+def registration_request(request):
+    context = {}
+    if request.method == "GET":
+        return render(request, 'djangoapp/registration.html')
+    elif request.method == "POST":
+        # Get user information from request.POST
+        username = request.POST.get('username')
+        password = request.POST.get('psw')
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+
+        # Check if user already exists
+        if User.objects.filter(username=username).exists():
+            context['error_message'] = 'Username already taken'
+            return render(request, 'djangoapp/registration.html', context)
+
+        # Create user in auth_user table
+        user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, password=password)
+        
+        # Login the user and redirect to a different page (e.g., index)
+        login(request, user)
+        return redirect("djangoapp:index")
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):

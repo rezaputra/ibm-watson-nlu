@@ -15,7 +15,7 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'djangoapp:static_page' %}">Dealership</a>
+                <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Review</a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -32,11 +32,12 @@
                     <ul class="navbar-nav ml-auto">
                         {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">{{ user.first_name }} ({{ user.username }})</a>
+                            <a class="nav-link" href="#">{{ user.username }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'djangoapp:logout' %}">Logout</a>
                         </li>
+
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'djangoapp:about' %}">About</a>
@@ -45,6 +46,11 @@
                             <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact</a>
                         </li>
                         <li class="nav-item">
+                            <script>
+                                {% if error_message %}
+                                    alert("{{ error_message }}");
+                                {% endif %}
+                            </script>
                             <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
                                 {% csrf_token %}
                                 <input
