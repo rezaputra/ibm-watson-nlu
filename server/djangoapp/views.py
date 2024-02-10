@@ -15,27 +15,31 @@ logger = logging.getLogger(__name__)
 
 
 # Create your views here.
+def static_page(request):
+    return render(request, 'djangoapp/index.html')
 
 
 # Create an `about` view to render a static about page
-# def about(request):
-# ...
+def about(request):
+    return render(request, 'djangoapp/about.html')
 
 
 # Create a `contact` view to return a static contact page
-#def contact(request):
+def contact(request):
+    return render(request, 'djangoapp/contact.html')
 
 # Create a `login_request` view to handle sign in request
-# def login_request(request):
-# ...
+def login(request):
+    pass
+    
 
 # Create a `logout_request` view to handle sign out request
-# def logout_request(request):
-# ...
+def logout(request):
+    pass
 
 # Create a `registration_request` view to handle sign up request
-# def registration_request(request):
-# ...
+def registration(request):
+    pass
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
