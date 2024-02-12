@@ -1,18 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
+{% extends 'base.html' %} {% block title %} Contact Us - Dealer Details {% endblock %} {% block content %}
+<div>
+    {% for dealer in dealer_details %}
+    <div>
+        <h5>Review for <strong>{{ dealer.full_name }}</strong></h5>
+        {% if dealer_details %}
+        <p>{{ dealer.address }}, {{ dealer.city }}, {{ dealer.state }}, {{ dealer.zip }}</p>
+        <!-- Add other dealer details as needed -->
+        {% else %}
+        <p>No details available for this dealer.</p>
+    </div>
+    {% endif %} {% endfor %}
 
-    <body>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="list-group">
+                {% for review in dealer_reviews %}
+                <div class="list-group-item">
+                    <h5 class="mb-1">{{ review.car_make }} {{ review.car_model }} ({{ review.car_year }})</h5>
+                    <p class="mb-1">{{ review.review }}</p>
+                    <small>
+                        {% if review.sentiment == "positive" %}
+                        <i class="em em-smiley">😊</i>
+                        <!-- Emoji for positive sentiment -->
+                        {% elif review.sentiment == "neutral" %}
+                        <i class="em em-neutral_face">😐</i>
+                        <!-- Emoji for neutral sentiment -->
+                        {% elif review.sentiment == "negative" %}
+                        <i class="em em-disappointed">😠</i>
+                        <!-- Emoji for negative sentiment -->
+                        {% else %} No sentiment available {% endif %}
+                    </small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
-    <!--Add a nav bar here -->
-
-    <!-- Add reviews as cards -->
-
-    </body>
-
-</html>
+    {% endblock %}
+</div>

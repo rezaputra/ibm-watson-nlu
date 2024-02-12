@@ -1,6 +1,55 @@
 <!-- index.html -->
 {% extends 'base.html' %} {% block title %}Home - Dealership Review{% endblock %} {% block content %}
 <!-- Content specific to the index page -->
-<h1>Welcome to the Dealership</h1>
-<!-- Add more content here -->
-{% endblock %}
+{% if user.is_authenticated %}
+<h3>Welcome to the Dealership</h3>
+<table class="table" id="table">
+    <thead>
+        <tr>
+            <th data-field="id">ID</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Address</th>
+            <th>Zip</th>
+            <th>
+                State <br />
+                <select class="form-select" id="state-filter" onchange="filterDealers()">
+                    <option value="">All States</option>
+                    {% for dealer in dealerships %}
+                    <option value="{{ dealer.st }}">{{ dealer.st }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dealer in dealerships %}
+        <tr>
+            <td>{{ dealer.id }}</td>
+            <td><a href="{% url 'djangoapp:dealer_details' dealer_id=dealer.id %}">{{ dealer.short_name }}</a></td>
+            <td>{{ dealer.city }}</td>
+            <td>{{ dealer.address }}</td>
+            <td>{{ dealer.zip }}</td>
+            <td>{{ dealer.st }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+    function filterDealers() {
+        var stateFilter = document.getElementById("state-filter").value
+        var rows = document.getElementById("table").getElementsByTagName("tbody")[0].getElementsByTagName("tr")
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i]
+            var state = row.cells[5].innerText
+            if (stateFilter === "" || state === stateFilter) {
+                row.style.display = ""
+            } else {
+                row.style.display = "none"
+            }
+        }
+    }
+</script>
+{% else %}
+<h3>Homepage</h3>
+{% endif %} {% endblock %}
